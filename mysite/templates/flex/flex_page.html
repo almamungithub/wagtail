@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <div class="jumbotron" style="color: #fff !important">
+        <h1 class="display-4">{{ self.subtitle }}</h1>
+        <div class="lead">
+            <p>This content is created from home child page as flex page</p>
+            {% for block in page.content  %}
+                {% include_block block %}
+            {% endfor %}
+            
+
+            
+        </div>
+
+    </div>
+{% endblock %}

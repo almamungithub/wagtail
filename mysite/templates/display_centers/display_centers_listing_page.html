@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+
+    <div class="container">
+        {% for post in posts %}
+            <div class="row mt-5 mb-5">
+                <div class="col-sm-3">
+                    {% image post.center_image fill-250x250 as center_img %}
+                    <a href="{{ post.url }}">
+                        <img src="{{ center_img.url }}" alt="{{ center_img.alt }}">
+                    </a>
+                </div>
+                <div class="col-sm-9">
+                    <a href="{{ post.url }}">
+                        <h2>{{ post.center_name }}</h2>
+                    </a>
+                    <p>{{ post.center_address | richtext }}</p>
+                    <p>{{ post.center_business_hours | richtext }}</p>
+                    <p>{{ post.center_contact_no }}</p>
+                    {# @todo add a summary field to BlogDetailPage; make it a RichTextField with only Bold and Italic enabled. #}
+                    <a href="{{ post.url }}" class="btn btn-primary mt-4">Read More</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}
