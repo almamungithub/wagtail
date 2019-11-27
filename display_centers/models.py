@@ -3,8 +3,8 @@ from django.db import models
 # Create your models here.
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField, StreamField
-from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, StreamFieldPanel
-
+# from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, TabbedInterface, ObjectList
 
 from wagtail.images.models import Image
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -37,14 +37,15 @@ class DisplayCentersListingPage(Page):
 
 class DisplayCentersDetailPage(Page):
 
-    center_name= models.CharField(max_length=100, blank=False, null=False,  help_text='Center Name')
+    center_name= models.CharField(max_length=100, blank=False, null=False, verbose_name='Center Name',  help_text='Center Name')
     # center_address= models.TextField(help_text='Center Address')
     # center_business_hours= models.TextField(help_text='Center Business Hours')
+    # center_address = RichTextField(features=["bold", "italic"], null=True, verbose_name='Center Address', help_text='Center Address')
+    center_address = RichTextField(null=True, verbose_name='Center Address', help_text='Center Address')
+    center_business_hours = RichTextField( null=True, verbose_name='Business Hours', help_text='Center Business Hours')
 
-    center_address = RichTextField(features=["bold", "italic"], null=True, help_text='Center Address')
-    center_business_hours = RichTextField(features=["bold", "italic"], null=True, help_text='Center Business Hours')
-
-    center_contact_no = models.CharField(max_length=100, blank=False, null=False, help_text='Center Contact No')
+    center_contact_no = models.CharField(max_length=100, blank=True, null=False, verbose_name='Contact No', help_text='Center Contact No')
+    google_map_link = models.CharField(max_length=100,  blank=True,  null=True, verbose_name='Google Map Link', help_text='Google Map Link')
 
 
 
@@ -57,23 +58,16 @@ class DisplayCentersDetailPage(Page):
     )
 
     content_panels = Page.content_panels + [
-        FieldPanel("center_name"),
-        FieldPanel("center_address"),
-        FieldPanel("center_business_hours"),
-        FieldPanel("center_contact_no"),
-        ImageChooserPanel("center_image"),
+        MultiFieldPanel([
+            FieldPanel("center_name"),
+            FieldPanel("center_address"),
+            FieldPanel("center_business_hours"),
+            FieldPanel("center_contact_no"),
+            ImageChooserPanel("center_image"),
+            FieldPanel("google_map_link"),
+        ], heading="Display Center Info")
+
     ]
-
-
-
-    # panels = [
-    #     FieldPanel("center_name"),
-    #     FieldPanel("center_address"),
-    #     FieldPanel("center_business_hours"),
-    #     FieldPanel("center_contact_no"),
-    #     ImageChooserPanel("center_image"),
-    #
-    # ]
 
 
     # def __str__(self):

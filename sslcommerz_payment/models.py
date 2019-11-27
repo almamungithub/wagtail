@@ -4,7 +4,7 @@ from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
 
 
-@register_setting()
+@register_setting(icon='password')
 class SslcommerzCredential(BaseSetting):
     live_base_url = models.CharField(max_length=255, default="https://securepay.sslcommerz.com")
     sandbox_base_url = models.CharField(max_length=255, default="https://sandbox.sslcommerz.com")
@@ -13,16 +13,19 @@ class SslcommerzCredential(BaseSetting):
     live_store_id = models.CharField(max_length=150, blank=True)
     live_store_pass = models.CharField(max_length=150, blank=True)
 
+    live_success_url = models.CharField(max_length=255, blank=True)
+    live_fail_url = models.CharField(max_length=255, blank=True)
+    live_ipn_url = models.CharField(max_length=255, blank=True)
+    live_cancel_url = models.CharField(max_length=255, blank=True)
+
     sandbox_store_name = models.CharField(max_length=150, blank=True)
     sandbox_store_id = models.CharField(max_length=150, blank=True)
     sandbox_store_pass = models.CharField(max_length=150, blank=True)
 
-    success_url = models.CharField(max_length=255, blank=True)
-    fail_url = models.CharField(max_length=255, blank=True)
-    ipn_url = models.CharField(max_length=255, blank=True)
-    cancel_url = models.CharField(max_length=255, blank=True)
-
-
+    sandbox_success_url = models.CharField(max_length=255, blank=True)
+    sandbox_fail_url = models.CharField(max_length=255, blank=True)
+    sandbox_ipn_url = models.CharField(max_length=255, blank=True)
+    sandbox_cancel_url = models.CharField(max_length=255, blank=True)
 
 
     ACTIVE_PAYMENT_CHOICES = (
@@ -31,26 +34,42 @@ class SslcommerzCredential(BaseSetting):
     )
     active_payment = models.CharField(max_length=10, choices=ACTIVE_PAYMENT_CHOICES)
 
-    content_sandbox_panels =  [
-        FieldPanel("sandbox_base_url"),
-        FieldPanel("sandbox_store_name"),
-        FieldPanel("sandbox_store_id"),
-        FieldPanel("sandbox_store_pass"),
+    content_sandbox_panels = [
+        MultiFieldPanel([
+            FieldPanel("sandbox_base_url"),
+            FieldPanel("sandbox_store_name"),
+            FieldPanel("sandbox_store_id"),
+            FieldPanel("sandbox_store_pass"),
+            FieldPanel("sandbox_success_url"),
+            FieldPanel("sandbox_fail_url"),
+            FieldPanel("sandbox_ipn_url"),
+            FieldPanel("sandbox_cancel_url"),
+        ], heading="Sslcommerz Sandbox Settings")
     ]
 
     content_live_panels = [
-        FieldPanel("live_base_url"),
-        FieldPanel("live_store_name"),
-        FieldPanel("live_store_id"),
-        FieldPanel("sandbox_store_pass"),
+        MultiFieldPanel([
+            FieldPanel("live_base_url"),
+            FieldPanel("live_store_name"),
+            FieldPanel("live_store_id"),
+            FieldPanel("live_store_pass"),
+            FieldPanel("live_success_url"),
+            FieldPanel("live_fail_url"),
+            FieldPanel("live_ipn_url"),
+            FieldPanel("live_cancel_url"),
+
+        ], heading="Sslcommerz Live Settings")
     ]
 
     settings_panels = [
-        FieldPanel("success_url"),
-        FieldPanel("fail_url"),
-        FieldPanel("ipn_url"),
-        FieldPanel("active_payment"),
+        MultiFieldPanel([
+            FieldPanel("active_payment"),
+
+
+        ], heading="Sslcommerz Active Settings")
     ]
+
+
 
     # This is where all the tabs are created
     edit_handler = TabbedInterface(
@@ -62,9 +81,8 @@ class SslcommerzCredential(BaseSetting):
     )
 
     class Meta:  # noqa
-
-        verbose_name = "SSLCommerz Setting"
-        verbose_name_plural = "SSLCommerz Settings"
+        verbose_name = "SSLCommerz"
+        verbose_name_plural = "SSLCommerz"
 
 
 class SslcommerzInformation(models.Model):

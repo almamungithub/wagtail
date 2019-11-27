@@ -1,6 +1,9 @@
 # streams/blocks.py
-from wagtail.core import blocks
+from wagtail.core import blocks, hooks
 from wagtail.images.blocks import ImageChooserBlock
+
+from wagtail.admin.rich_text.converters.editor_html import WhitelistRule
+from wagtail.core.whitelist import allow_without_attributes
 
 
 class TitleAndTextBlock(blocks.StructBlock):

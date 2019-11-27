@@ -36,6 +36,15 @@ class HomePageCarouselImages(Orderable):
 class HomePage(Page):
     """Home page model."""
 
+    subpage_types = [
+        'blog.BlogListingPage',  # appname.ModelName
+        'contact.ContactPage',  # appname.ModelName
+        'flex.FlexPage',  # appname.ModelName
+    ]
+    parent_page_type = [
+        'wagtailcore.Page'  # appname.ModelName
+    ]
+
     template = "home/home_page.html"
     max_count = 1
 
